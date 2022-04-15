@@ -266,6 +266,7 @@ view: order_items {
     type: number
     value_format_name: usd
     sql: ${sale_price} - ${inventory_items.cost};;
+    required_access_grants: [can_see_gross_margin]
   }
 
   dimension: item_gross_margin_percentage {
