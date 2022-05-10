@@ -1,4 +1,4 @@
-project_name: "thelook_event"
+project_name: "thelook"
 
 localization_settings: {
   default_locale: en

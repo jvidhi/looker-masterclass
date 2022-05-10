@@ -357,9 +357,9 @@
       options:
         steps: 5
     y_axes: []
-    y_axis_max: ['50']
+    y_axis_max: ['0.2']
     y_axis_labels: [Percent of Cohort still Active]
-    y_axis_value_format: "#\\%"
+    y_axis_value_format: "\\"
     limit_displayed_rows_values:
       show_hide: hide
       first_last: first

@@ -14,6 +14,16 @@ datagroup: ecommerce_etl {
 persist_with: ecommerce_etl
 ############ Base Explores #############
 
+access_grant: can_see_email {
+  user_attribute: can_see_email
+  allowed_values: ["yes"]
+}
+
+access_grant: can_see_gross_margin {
+  user_attribute: can_see_gross_margin
+  allowed_values: ["yes"]
+}
+
 explore: order_items {
   label: "(1) Orders, Items and Users"
   view_name: order_items
@@ -63,6 +73,7 @@ explore: order_items {
   join: discounts {
     view_label: "Discounts"
     type: inner
+    relationship: many_to_one
     sql_on: ${products.id} = ${discounts.product_id} ;;
   }
 

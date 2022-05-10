@@ -69,6 +69,8 @@ view: users {
     label: "Email"
     sql: ${TABLE}.email ;;
     tags: ["email"]
+    required_access_grants: [can_see_email]
+
 
     link: {
       label: "User Lookup Dashboard"
@@ -245,5 +247,31 @@ view: users {
 
   set: detail {
     fields: [id, name, email, age, created_date, orders.count, order_items.count]
+  }
+
+  dimension: user_email {
+    type: string
+    label: "{% if _user_attributes['can_see_sensitive_data'] == 'yes' %} User Email
+    {% else %} User Email (Hashed due to insufficient permissions)
+    {% endif %}"
+    sql:
+      {% if _user_attributes['can_see_sensitive_data']  == 'yes' %}
+          ${TABLE}.email
+      {% else %}
+          MD5(${TABLE}.email)
+      {% endif %}   ;;
+  }
+
+  dimension: user_email_red {
+    type: string
+    label: "{% if _user_attributes['can_see_sensitive_data'] == 'yes' %} Redacted Email
+    {% else %} Redacted Email (Redacted due to insufficient permissions)
+    {% endif %}"
+    sql:
+      {% if _user_attributes['can_see_sensitive_data']  == 'yes' %}
+          ${TABLE}.email
+      {% else %}
+          CONCAT('#####@',REGEXP_EXTRACT(${TABLE}.email, r'^[a-zA-Z0-9_.+-]+@([a-zA-Z0-9-.]+$)'))
+      {% endif %}   ;;
   }
 }
