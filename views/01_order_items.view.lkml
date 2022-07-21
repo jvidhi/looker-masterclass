@@ -298,6 +298,7 @@ view: order_items {
     sql: ${gross_margin} ;;
     # drill_fields: [detail*]
     drill_fields: [user_id, average_sale_price, total_gross_margin]
+    required_access_grants: [can_see_gross_margin]
   }
 
   measure: average_sale_price {

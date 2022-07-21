@@ -1,7 +1,7 @@
-- dashboard: business_pulse
-  title: Business Pulse
+- dashboard: business_pulse_tmp
+  title: Business Pulse TMP
   layout: newspaper
-  preferred_viewer: dashboards
+  preferred_viewer: dashboards-next
   description: ''
   query_timezone: user_timezone
   embed_style:
@@ -357,9 +357,9 @@
       options:
         steps: 5
     y_axes: []
-    y_axis_max: ['0.2']
+    y_axis_max: ['50']
     y_axis_labels: [Percent of Cohort still Active]
-    y_axis_value_format: "\\"
+    y_axis_value_format: "#\\%"
     limit_displayed_rows_values:
       show_hide: hide
       first_last: first
