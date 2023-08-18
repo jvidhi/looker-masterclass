@@ -8,14 +8,14 @@ view: inventory_snapshot {
       )
 
       select
-        inventory_items.product_id
-        ,calendar.snapshot_date
-        ,count(*) as number_in_stock
+      inventory_items.product_id
+      ,calendar.snapshot_date
+      ,count(*) as number_in_stock
       from looker-private-demo.ecomm.inventory_items
-         join calendar
-          on inventory_items.created_at <= calendar.snapshot_date
-          and (date(inventory_items.sold_at) >= calendar.snapshot_date OR inventory_items.sold_at is null)
-        group by 1,2;;
+      join calendar
+      on inventory_items.created_at <= calendar.snapshot_date
+      and (date(inventory_items.sold_at) >= calendar.snapshot_date OR inventory_items.sold_at is null)
+      group by 1,2;;
   }
 
   dimension: product_id {

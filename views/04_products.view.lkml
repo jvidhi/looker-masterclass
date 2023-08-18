@@ -37,7 +37,8 @@ view: products {
     }
     link: {
       label: "{{value}} Analytics Dashboard"
-      url: "/dashboards-next/CRMxoGiGJUv4eGALMHiAb0?Brand%20Name={{ value | encode_uri }}"
+#      url: "/dashboards-next/CRMxoGiGJUv4eGALMHiAb0?Brand%20Name={{ value | encode_uri }}"
+      url: "/dashboards/thelook%3A%3Abrand_lookup?Brand%20Name={{ value | encode_uri }}"
       icon_url: "https://www.seekpng.com/png/full/138-1386046_google-analytics-integration-analytics-icon-blue-png.png"
     }
 
@@ -213,6 +214,26 @@ view: products {
     drill_fields: [department, detail2*, -department_count] # don't show because it will always be 1
   }
 
+  dimension: cancel_job_test {
+    type: string
+    #sql: ${TABLE}.category ;;
+    sql: "bquxjob_b065af8_1821cd7a972" ;;
+    action: {
+      label: "Cancel Query"
+      url: "https://us-east1-looker-dba-demo.cloudfunctions.net/cancel_job2"
+      param: {
+        name: "data"
+        value: "{{ value }}"
+        #value: "'{\"name\": \"bquxjob_3e34ff0a_1821987927a\"}'"
+        #value: "'{name=bquxjob_3e34ff0a_1821987927a"
+      }
+      #form_param: {
+      #  name: "name"
+      #  type: string
+      #  label: "Kill BQ"
+      #}
+    }
+  }
   set: detail {
     fields: [id, item_name, brand, category, department, retail_price, customers.count, orders.count, order_items.count, inventory_items.count]
   }

@@ -16,8 +16,9 @@ persist_with: ecommerce_etl
 
 access_grant: can_see_email {
   user_attribute: can_see_email
-  allowed_values: ["yes"]
+  allowed_values: ["no"]
 }
+
 
 access_grant: can_see_gross_margin {
   user_attribute: can_see_gross_margin
@@ -27,6 +28,15 @@ access_grant: can_see_gross_margin {
 explore: order_items {
   label: "(1) Orders, Items and Users"
   view_name: order_items
+
+  conditionally_filter: {
+    filters: {
+      field: created_date
+      value: "1 month"
+    }
+
+    unless: [users.id, users.state]
+  }
 
   join: order_facts {
     type: left_outer
@@ -286,7 +296,7 @@ explore: inventory_snapshot {
   label: "(7) Historical Stock Snapshot Analysis"
   join: trailing_sales_snapshot {
     sql_on: ${inventory_snapshot.product_id}=${trailing_sales_snapshot.product_id}
-    AND ${inventory_snapshot.snapshot_date}=${trailing_sales_snapshot.snapshot_date};;
+      AND ${inventory_snapshot.snapshot_date}=${trailing_sales_snapshot.snapshot_date};;
     type: left_outer
     relationship: one_to_one
   }
@@ -320,7 +330,7 @@ explore: kitten_order_items {
 
 ######### Cohort Analysis BQML #########
 explore: ecomm_training_info {
-label: "E-Comm Cohort Analysis Training"
+  label: "E-Comm Cohort Analysis Training"
   join: cluster_info {
     relationship: many_to_one
     sql: LEFT JOIN UNNEST(ecomm_training_info.cluster_info) as cluster_info ;;

@@ -1,4 +1,6 @@
 include: "/views/**/*.view" # include all the views
+include: "*.model" # include all the views
+
 
 # Place in `thelook` model
 explore: +order_items {

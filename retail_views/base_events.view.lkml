@@ -81,6 +81,7 @@ view: events {
   dimension: traffic_source {
     type: string
     sql: ${TABLE}.TRAFFIC_SOURCE ;;
+    order_by_field: traffic_source
   }
 
   dimension: uri {

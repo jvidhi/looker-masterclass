@@ -123,37 +123,37 @@ view: cohort_size {
 #           {% else %}
 #             {{ format_symbol._value }}{{ linked_value }}
 #           {% endif %} ;;
-    drill_fields: [cohort_size, percent_user_retention, users.count, average_orders_per_user, average_spend_per_user]
-    label_from_parameter: metric_filter
-  }
+      drill_fields: [cohort_size, percent_user_retention, users.count, average_orders_per_user, average_spend_per_user]
+      label_from_parameter: metric_filter
+    }
 
-  measure: percent_user_retention {
-    label: "Percent User Retention"
-    view_label: "Users"
-    description: "number of active users / number of users in the cohort (use with months since signup dimension)"
-    type: number
-    sql: round(100.0 * ${users.count} / nullif(${cohort_size},0),2) ;;
-    value_format: "0.00\%"
-    drill_fields: [users.count, cohort_size, percent_user_retention]
-  }
+    measure: percent_user_retention {
+      label: "Percent User Retention"
+      view_label: "Users"
+      description: "number of active users / number of users in the cohort (use with months since signup dimension)"
+      type: number
+      sql: round(100.0 * ${users.count} / nullif(${cohort_size},0),2) ;;
+      value_format: "0.00\%"
+      drill_fields: [users.count, cohort_size, percent_user_retention]
+    }
 
-  measure: average_spend_per_user {
-    label: "Average Spend per User"
-    view_label: "Order Items"
-    type: number
-    value_format_name: usd
-    sql: 1.0 * ${order_items.total_sale_price} / NULLIF(${users.count},0) ;;
-    drill_fields: [order_items.id, order_items.order_id, order_items.created_date, order_items.total_sale_price, users.email]
-  }
+    measure: average_spend_per_user {
+      label: "Average Spend per User"
+      view_label: "Order Items"
+      type: number
+      value_format_name: usd
+      sql: 1.0 * ${order_items.total_sale_price} / NULLIF(${users.count},0) ;;
+      drill_fields: [order_items.id, order_items.order_id, order_items.created_date, order_items.total_sale_price, users.email]
+    }
 
-  measure: average_orders_per_user {
-    label: "Average Orders per User"
-    view_label: "Order Items"
-    type: number
-    value_format_name: usd
-    sql: 1.0 * ${order_items.order_count} / NULLIF(${users.count},0) ;;
-    drill_fields: [users.email, order_items.order_count]
-  }
+    measure: average_orders_per_user {
+      label: "Average Orders per User"
+      view_label: "Order Items"
+      type: number
+      value_format_name: usd
+      sql: 1.0 * ${order_items.order_count} / NULLIF(${users.count},0) ;;
+      drill_fields: [users.email, order_items.order_count]
+    }
 
 #   measure: cumulative_spend {
 #     view_label: "Order Items"
@@ -169,31 +169,31 @@ view: cohort_size {
 # Used for dynamically applying a format to the metric parameter
 ################################################################
 
-  dimension: metric_name {
-    label: "Metric Name"
-    hidden: yes
-    type: string
-    sql: CASE
+    dimension: metric_name {
+      label: "Metric Name"
+      hidden: yes
+      type: string
+      sql: CASE
           WHEN {% parameter metric_filter %} = 'User Retention' THEN 'User Retention'
           WHEN {% parameter metric_filter %} = 'Average Orders per User' THEN 'Average Orders per User'
           WHEN {% parameter metric_filter %} = 'Average Spend per User' THEN 'Average Spend per User'
           WHEN {% parameter metric_filter %} = 'Cumulative Spend' THEN 'Cumulative Spend'
           ELSE NULL
         END ;;
-  }
+    }
 
-  dimension: format_symbol {
-    label: "Format Symbol"
-    hidden: yes
-    sql:
+    dimension: format_symbol {
+      label: "Format Symbol"
+      hidden: yes
+      sql:
         CASE
           WHEN ${metric_name} = 'User Retention' THEN '%'
           WHEN ${metric_name} = 'Average Spend per User' THEN '$'
           WHEN ${metric_name} = 'Cumulative Spend' THEN '$'
           ELSE NULL
         END ;;
+    }
   }
-}
 
 
 ################################################################
@@ -201,14 +201,14 @@ view: cohort_size {
 ################################################################
 
 
-view: order_items_cohorts {
-  extends: [order_items]
+  view: order_items_cohorts {
+    extends: [order_items]
 
-  dimension: months_since_signup {
-    label: "Months Since Signup"
-    view_label: "Order Items"
-    description: "Months an order occurred since the user first signed up"
-    type: number
-    sql: DATE_DIFF(date(${users.created_raw}), date(${created_raw}), MONTH) ;;
+    dimension: months_since_signup {
+      label: "Months Since Signup"
+      view_label: "Order Items"
+      description: "Months an order occurred since the user first signed up"
+      type: number
+      sql: DATE_DIFF(date(${users.created_raw}), date(${created_raw}), MONTH) ;;
+    }
   }
-}

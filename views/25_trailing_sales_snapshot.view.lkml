@@ -8,18 +8,18 @@ view: trailing_sales_snapshot {
       )
 
       select
-        inventory_items.product_id
-        ,date(order_items.created_at) as snapshot_date
-        ,count(*) as trailing_28d_sales
+      inventory_items.product_id
+      ,date(order_items.created_at) as snapshot_date
+      ,count(*) as trailing_28d_sales
       from looker-private-demo.ecomm.order_items
       join looker-private-demo.ecomm.inventory_items
-        on order_items.inventory_item_id = inventory_items.id
+      on order_items.inventory_item_id = inventory_items.id
       join calendar
-        on date(order_items.created_at) <= date_add(calendar.snapshot_date, interval 28 day)
-        and date(order_items.created_at) >= calendar.snapshot_date
+      on date(order_items.created_at) <= date_add(calendar.snapshot_date, interval 28 day)
+      and date(order_items.created_at) >= calendar.snapshot_date
       -- where dateadd('day',90,calendar.snapshot_date)>=current_date
       group by 1,2
-    ;;
+      ;;
   }
 
 #   measure: count {

@@ -28,7 +28,7 @@ view: order_items {
   measure: count {
     label: "Count"
     type: count
-    drill_fields: [detail*]
+    drill_fields: [order_id, order_count]
   }
 
   measure: count_last_28d {
@@ -81,7 +81,7 @@ view: order_items {
         name: "Message"
         type: textarea
         default: "Hey,
-        Could you check out order #{{value}}. It's saying its {{status._value}},
+        Could you check out order #{{value}}. It's saying its {{order_items.status._value}},
         but the customer is reaching out to us about it.
         ~{{ _user_attributes.first_name}}"
       }
@@ -191,12 +191,12 @@ view: order_items {
         AND ${created_raw} < CURRENT_TIMESTAMP()
         THEN 'This Year to Date'
 
-        WHEN EXTRACT(YEAR from ${created_raw}) + 1 = EXTRACT(YEAR from CURRENT_TIMESTAMP())
-        AND CAST(FORMAT_TIMESTAMP('%j', ${created_raw}) AS INT64) <= CAST(FORMAT_TIMESTAMP('%j', CURRENT_TIMESTAMP()) AS INT64)
-        THEN 'Last Year to Date'
+      WHEN EXTRACT(YEAR from ${created_raw}) + 1 = EXTRACT(YEAR from CURRENT_TIMESTAMP())
+      AND CAST(FORMAT_TIMESTAMP('%j', ${created_raw}) AS INT64) <= CAST(FORMAT_TIMESTAMP('%j', CURRENT_TIMESTAMP()) AS INT64)
+      THEN 'Last Year to Date'
 
       END
-       ;;
+      ;;
   }
 
   dimension: days_since_sold {

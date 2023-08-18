@@ -14,9 +14,9 @@ view: repeat_purchase_facts {
       AND order_items.created_at < repeat_order_items.created_at
     GROUP BY 1, 2
      ;;
-    }
+  }
 
-   dimension: order_id {
+  dimension: order_id {
     label: "Order ID"
     type: number
     hidden: yes

@@ -19,46 +19,46 @@ view: eav_source {
     type: max
     sql: CASE WHEN {% condition picker %} ${attribute} {% endcondition %} THEN ${val} ELSE NULL END ;;
   }
-  }
-  explore: eav_source { hidden: yes }
-  view: eav_flattened {
-    derived_table: {
-      explore_source: eav_source {
-        column: object_id {}
-        column: picked_attribute {}
-        bind_filters: {
-          from_field: eav_flattened.picker
-          to_field: eav_source.picker
-        }
-        bind_filters: {
-          from_field: eav_flattened.entity
-          to_field: eav_source.entity
-        }
-        filters: [ eav_source.attribute: "-NULL" ]
+}
+explore: eav_source { hidden: yes }
+view: eav_flattened {
+  derived_table: {
+    explore_source: eav_source {
+      column: object_id {}
+      column: picked_attribute {}
+      bind_filters: {
+        from_field: eav_flattened.picker
+        to_field: eav_source.picker
       }
+      bind_filters: {
+        from_field: eav_flattened.entity
+        to_field: eav_source.entity
+      }
+      filters: [ eav_source.attribute: "-NULL" ]
     }
-    filter: entity { type: number }
-    dimension: object_id {}
-    filter: picker { type: string }
-    parameter: is_number { type: yesno }
-    dimension: picked_attribute {
-      sql:
+  }
+  filter: entity { type: number }
+  dimension: object_id {}
+  filter: picker { type: string }
+  parameter: is_number { type: yesno }
+  dimension: picked_attribute {
+    sql:
         {% if is_number._parameter_value == 'true' %}
           CAST(${TABLE}.picked_attribute AS INT64)
           {% else %}
           ${TABLE}.picked_attribute
           {% endif %};;
-    }
-    measure: attribute_sum {
-      label: "Sum"
-      type: sum
-      sql: ${picked_attribute} ;;
-    }
   }
-  explore: eav_flattened {
-    #NOTE: this would be be replaced by an access_filter for entity, i.e. I am always querying the table as an entity and want
-    #to measure the custom attributes of my objects
-    always_filter: {
-      filters: [eav_flattened.entity: "3"]
-    }
+  measure: attribute_sum {
+    label: "Sum"
+    type: sum
+    sql: ${picked_attribute} ;;
   }
+}
+explore: eav_flattened {
+  #NOTE: this would be be replaced by an access_filter for entity, i.e. I am always querying the table as an entity and want
+  #to measure the custom attributes of my objects
+  always_filter: {
+    filters: [eav_flattened.entity: "3"]
+  }
+}
